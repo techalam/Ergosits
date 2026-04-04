@@ -22,22 +22,82 @@ export default function Checkout() {
 
   // ---------------- HANDLE ----------------
 
-  const handleSubmit = () => {
-    if (!form.name || !form.phone || !form.address) {
-      alert("Please fill all required fields");
-      return;
-    }
+const handleSubmit = async () => {
 
-    console.log("ORDER:", {
-      items,
-      total,
-      form,
-    });
+  if (!form.name || !form.phone || !form.address) {
+    alert("Fill all fields");
+    return;
+  }
 
-    alert("Order placed (demo)");
+  // 1. Create order (Razorpay)
+  const res = await fetch("/api/create-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount: total }),
+  });
 
-    // reset (optional)
+  const order = await res.json();
+
+  // 2. Load Razorpay
+  const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+  document.body.appendChild(script);
+
+  script.onload = () => {
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      order_id: order.id,
+
+      name: "Ergosits",
+
+      handler: async function (response) {
+
+        // 3. VERIFY + SAVE ORDER
+        const verify = await fetch("/api/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...response,
+            orderData: {
+              ...form,
+              items,
+              total,
+            },
+          }),
+        });
+
+        const result = await verify.json();
+
+        if (result.success) {
+          alert("Order placed successfully 🎉");
+
+          // clear cart
+          useCart.getState().clearCart();
+
+          window.location.href = "/success";
+        } else {
+          alert("Payment verification failed");
+        }
+      },
+
+      prefill: {
+        name: form.name,
+        contact: form.phone,
+      },
+
+      theme: {
+        color: "#000",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
+};
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-32">

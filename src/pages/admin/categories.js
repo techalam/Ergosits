@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
+import AdminLayout from "@/components/admin/AdminLayout";
 
 export default function Categories() {
 
@@ -88,24 +89,25 @@ export default function Categories() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-20">
+    <AdminLayout>
+    <div className="max-w-full sm:max-w-7xl mx-auto px-2 py-2 sm:px-6 sm:py-20">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-10">
-        <h1 className="text-4xl font-semibold">Categories</h1>
+        <h1 className="text-xl sm:text-4xl font-semibold">Categories</h1>
 
         <button
           onClick={() => setShowModal(true)}
-          className="px-6 py-3 bg-black text-white rounded-xl"
+          className="px-3 py-2 bg-black text-white rounded-xl"
         >
           + Add Category
         </button>
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+      <div className="bg-white rounded-2xl shadow overflow-auto">
 
-        <table className="w-full">
+        <table className="w-full text-sm sm:text-base">
 
           <thead className="bg-gray-100 text-left">
             <tr>
@@ -156,7 +158,7 @@ export default function Categories() {
 
       {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
 
           <div className="bg-white p-8 rounded-2xl w-full max-w-md">
 
@@ -228,5 +230,6 @@ export default function Categories() {
       )}
 
     </div>
+    </AdminLayout>
   );
 }

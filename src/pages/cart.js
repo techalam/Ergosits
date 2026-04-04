@@ -31,7 +31,7 @@ export default function Cart() {
           >
             {/* left */}
             <div className="flex items-center gap-6">
-              <Image src={item.image} alt={item.name} width={120} height={120} />
+              <Image src={item.images?.[0]} alt={item.name} width={120} height={120} />
               <div>
                 <h2 className="text-xl font-medium">{item.name}</h2>
                 <p className="text-gray-500">
