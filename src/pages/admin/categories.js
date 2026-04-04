@@ -22,7 +22,16 @@ export default function Categories() {
   };
 
   useEffect(() => {
-    fetchCategories();
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser();
+
+      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
+        return router.push("/admin/login");
+      }
+      fetchCategories();
+    };
+
+    checkUser();
   }, []);
 
   // upload

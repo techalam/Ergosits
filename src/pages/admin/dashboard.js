@@ -15,8 +15,22 @@ export default function Dashboard() {
 
   const [recentOrders, setRecentOrders] = useState([]);
 
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
+
+    // 🔐 Protect route
   useEffect(() => {
-    loadData();
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser();
+
+      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
+        return router.push("/admin/login");
+      }
+      loadData();
+    };
+
+    checkUser();
   }, []);
 
   const loadData = async () => {

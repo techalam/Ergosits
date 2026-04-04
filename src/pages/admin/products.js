@@ -36,9 +36,23 @@ export default function Products() {
     setCategories(data || []);
   };
 
+  // useEffect(() => {
+  //   fetchProducts();
+  //   fetchCategories();
+  // }, []);
+
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser();
+
+      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
+        return router.push("/admin/login");
+      }
+      fetchProducts();
+      fetchCategories();
+    };
+
+    checkUser();
   }, []);
 
   // ---------------- IMAGE UPLOAD ----------------
