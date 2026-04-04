@@ -1,0 +1,68 @@
+const products = [
+  {
+    id: 1,
+    name: "Ergosits Pro Laptop Stand",
+    price: 1999,
+    category: "laptop-stand",
+    image: "/images/stand.png",
+    slug: "pro-laptop-stand",
+  },
+  {
+    id: 2,
+    name: "Ergosits Foldable Laptop Stand",
+    price: 1499,
+    category: "laptop-stand",
+    image: "/images/p2.webp",
+    slug: "foldable-laptop-stand",
+  },
+  {
+    id: 3,
+    name: "Ergosits Adjustable Laptop Table",
+    price: 2499,
+    category: "laptop-table",
+    image: "/images/p3.webp",
+    slug: "adjustable-laptop-table",
+  },
+  {
+    id: 4,
+    name: "Ergosits Portable Laptop Table",
+    price: 2199,
+    category: "laptop-table",
+    image: "/images/p4.webp",
+    slug: "portable-laptop-table",
+  },
+  {
+    id: 5,
+    name: "Ergosits Aluminium Mobile Stand",
+    price: 699,
+    category: "mobile-stand",
+    image: "/images/p5.jpg",
+    slug: "aluminium-mobile-stand",
+  },
+  {
+    id: 6,
+    name: "Ergosits Foldable Mobile Stand",
+    price: 599,
+    category: "mobile-stand",
+    image: "/images/p6.webp",
+    slug: "foldable-mobile-stand",
+  },
+  {
+    id: 7,
+    name: "Ergosits Wall Hanging Mobile Holder",
+    price: 499,
+    category: "mobile-holder",
+    image: "/images/p7.webp",
+    slug: "360-mobile-holder",
+  },
+  {
+    id: 8,
+    name: "Ergosits Flexible Mobile Holder",
+    price: 549,
+    category: "mobile-holder",
+    image: "/images/p8.webp",
+    slug: "flexible-mobile-holder",
+  },
+];
+
+export default products;
