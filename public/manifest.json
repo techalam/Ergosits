@@ -1,7 +1,7 @@
 {
   "name": "Ergosits Admin",
   "short_name": "Admin",
-  "start_url": "/admin/dashboard",
+  "start_url": "/admin/login",
   "scope": "/admin",
   "display": "standalone",
   "background_color": "#ffffff",
