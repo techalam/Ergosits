@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../lib/supabase";
 import ProductCard from "../components/ProductCard";
+import { useRouter } from "next/router";
 
 export default function Products() {
 
@@ -13,6 +14,8 @@ export default function Products() {
   });
 
   const [showFilters, setShowFilters] = useState(false);
+  const router = useRouter();
+  const { search, category } = router.query;
 
   // ---------------- FETCH ----------------
 
@@ -37,20 +40,21 @@ export default function Products() {
 
   // ---------------- FILTER + SORT ----------------
 
-  const filteredProducts = products
-    .filter((p) =>
-      filters.category ? p.category_id === filters.category : true
-    )
-    .sort((a, b) => {
-      if (filters.sort === "low") return a.price - b.price;
-      if (filters.sort === "high") return b.price - a.price;
-      return 0;
-    });
+const filteredProducts = products
+  .filter((p) => {
+    if (category && p.category_id !== category) return false;
+
+    if (search) {
+      return p.name.toLowerCase().includes(search.toLowerCase());
+    }
+
+    return true;
+  });
 
   // ---------------- UI ----------------
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-32">
+    <div className="max-w-7xl mx-auto px-6 py-16">
 
       <h1 className="text-4xl font-semibold mb-12">
         All Products

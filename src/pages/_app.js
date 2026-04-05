@@ -6,7 +6,7 @@ import Cursor from "@/components/Cursor";
 export default function MyApp({ Component, pageProps }) {
   return (
     <SmoothScroll>
-      <Cursor />
+      {/* <Cursor /> */}
     <Layout>
       <Component {...pageProps} />
     </Layout>
