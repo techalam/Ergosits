@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import AdminLayout from "../../components/admin/AdminLayout";
 import Loader from "../../components/admin/Loader";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
 
@@ -14,6 +15,7 @@ export default function Dashboard() {
   });
 
   const [recentOrders, setRecentOrders] = useState([]);
+  const router = useRouter();
 
   // useEffect(() => {
   //   loadData();

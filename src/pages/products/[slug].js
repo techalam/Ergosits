@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getProductBySlug } from "../../lib/api";
+import supabase from "../../lib/supabase";
 import useCart from "../../lib/cartStore";
-import Image from "next/image";
 
 export default function ProductPage() {
 
@@ -10,63 +9,70 @@ export default function ProductPage() {
   const { slug } = router.query;
 
   const [product, setProduct] = useState(null);
-  const [qty, setQty] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
 
-  const addItem = useCart((state) => state.addItem);
+  const { addItem } = useCart();
 
   useEffect(() => {
-    if (!slug) return;
-
-    const load = async () => {
-      const data = await getProductBySlug(slug);
-      setProduct(data);
-    };
-
-    load();
+    if (slug) fetchProduct();
   }, [slug]);
 
-  if (!product) return <div className="p-40">Loading...</div>;
+  const fetchProduct = async () => {
+    const { data } = await supabase
+      .from("products")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  const handleAddToCart = () => {
-    addItem({ ...product, qty });
+    setProduct(data);
   };
 
-  const handleBuyNow = () => {
-    addItem({ ...product, qty });
-    router.push("/checkout");
+  if (!product) {
+    return (
+      <div className="p-20 text-center">
+        Loading...
+      </div>
+    );
+  }
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      images: product.images,
+      qty: 1,
+    });
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-32">
+    <div className="max-w-7xl mx-auto px-6 py-20">
 
-      <div className="grid md:grid-cols-2 gap-20">
+      <div className="grid md:grid-cols-2 gap-12">
 
         {/* LEFT - IMAGES */}
         <div>
 
-          {/* MAIN IMAGE */}
           <div className="bg-[#F5F5F7] rounded-2xl p-6 flex justify-center">
-            <Image
+            <img
               src={product.images?.[activeImage]}
-              width={400}
-              height={400}
-              alt={product.name}
+              className="h-80 object-contain"
             />
           </div>
 
           {/* THUMBNAILS */}
-          <div className="flex gap-4 mt-6">
+          <div className="flex gap-3 mt-4">
+
             {product.images?.map((img, i) => (
               <img
                 key={i}
                 src={img}
                 onClick={() => setActiveImage(i)}
-                className={`w-20 h-20 object-cover rounded cursor-pointer border ${
-                  activeImage === i ? "border-black" : "border-transparent"
-                }`}
+                className={`w-16 h-16 object-cover rounded-lg cursor-pointer border 
+                ${activeImage === i ? "border-black" : "border-gray-200"}`}
               />
             ))}
+
           </div>
 
         </div>
@@ -74,52 +80,48 @@ export default function ProductPage() {
         {/* RIGHT - INFO */}
         <div>
 
-          <h1 className="text-5xl font-semibold">
+          <h1 className="text-2xl font-semibold">
             {product.name}
           </h1>
 
-          <p className="text-3xl mt-6">
+          <p className="text-3xl font-bold mt-4">
             ₹{product.price}
           </p>
 
-          <p className="text-gray-500 mt-8 leading-relaxed">
+          <p className="text-gray-500 mt-4">
             {product.description}
           </p>
 
-          {/* QUANTITY */}
-          <div className="mt-10 flex items-center gap-4">
+          {/* DETAILS */}
+          <div className="mt-6 border-t pt-6 space-y-2 text-sm">
 
-            <button
-              onClick={() => setQty(Math.max(1, qty - 1))}
-              className="px-4 py-2 border rounded"
-            >
-              -
-            </button>
+            {product.material && (
+              <p><strong>Material:</strong> {product.material}</p>
+            )}
 
-            <span>{qty}</span>
+            {product.color && (
+              <p><strong>Color:</strong> {product.color}</p>
+            )}
 
-            <button
-              onClick={() => setQty(qty + 1)}
-              className="px-4 py-2 border rounded"
-            >
-              +
-            </button>
+            {product.dimensions && (
+              <p><strong>Dimensions:</strong> {product.dimensions}</p>
+            )}
 
           </div>
 
-          {/* ACTIONS */}
-          <div className="flex gap-4 mt-10">
+          {/* CTA */}
+          <div className="mt-8 flex gap-4">
 
             <button
               onClick={handleAddToCart}
-              className="px-8 py-4 bg-black text-white rounded-full hover:scale-105 transition"
+              className="flex-1 py-4 border rounded-full"
             >
               Add to Cart
             </button>
 
             <button
-              onClick={handleBuyNow}
-              className="px-8 py-4 border rounded-full hover:bg-black hover:text-white transition"
+              onClick={() => router.push("/checkout")}
+              className="flex-1 py-4 bg-black text-white rounded-full"
             >
               Buy Now
             </button>

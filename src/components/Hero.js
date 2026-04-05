@@ -6,7 +6,7 @@ export default function Hero() {
     <section className="relative flex justify-center overflow-hidden pt-0 sm:pb-20">
 
       {/* Background Glow */}
-      <div className="absolute w-[600px] h-[600px] bg-[#7CFFB2] blur-[160px] opacity-20 rounded-full top-[-150px] right-[-150px]" />
+      <div className="hidden sm:block absolute w-[600px] h-screen bg-[#7CFFB2] blur-[160px] opacity-20 rounded-full top-[-150px] right-[-150px]" />
 
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-1 items-center">
 

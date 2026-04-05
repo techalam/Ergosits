@@ -4,7 +4,6 @@ import ProductCard from "../components/ProductCard";
 import { useRouter } from "next/router";
 
 export default function Products() {
-
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -16,16 +15,25 @@ export default function Products() {
   const [showFilters, setShowFilters] = useState(false);
   const router = useRouter();
   const { search, category } = router.query;
+  const [loading, setLoading] = useState(true);
 
   // ---------------- FETCH ----------------
 
   const fetchProducts = async () => {
-    const { data } = await supabase
-      .from("products")
-      .select("*")
-      .order("created_at", { ascending: false });
+    try {
+      setLoading(true);
 
-    setProducts(data || []);
+      const { data } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      setProducts(data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setLoading(false);
+    }
   };
 
   const fetchCategories = async () => {
@@ -40,29 +48,47 @@ export default function Products() {
 
   // ---------------- FILTER + SORT ----------------
 
-const filteredProducts = products
+  const filteredProducts = products
   .filter((p) => {
-    if (category && p.category_id !== category) return false;
 
+    // CATEGORY (from sidebar)
+    if (filters.category && p.category_id !== filters.category) {
+      return false;
+    }
+
+    // CATEGORY (from URL)
+    if (category && p.category_id !== category) {
+      return false;
+    }
+
+    // SEARCH
     if (search) {
       return p.name.toLowerCase().includes(search.toLowerCase());
     }
 
     return true;
+  })
+  .sort((a, b) => {
+
+    if (filters.sort === "low") {
+      return a.price - b.price;
+    }
+
+    if (filters.sort === "high") {
+      return b.price - a.price;
+    }
+
+    return 0;
   });
 
   // ---------------- UI ----------------
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
-
-      <h1 className="text-4xl font-semibold mb-12">
-        All Products
-      </h1>
+      <h1 className="text-4xl font-semibold mb-12">All Products</h1>
 
       {/* MOBILE TOP BAR */}
       <div className="flex gap-4 mb-6 md:hidden">
-
         <button
           onClick={() => setShowFilters(true)}
           className="flex-1 border py-2 rounded-xl"
@@ -72,23 +98,18 @@ const filteredProducts = products
 
         <select
           value={filters.sort}
-          onChange={(e) =>
-            setFilters({ ...filters, sort: e.target.value })
-          }
+          onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
           className="flex-1 border px-3 py-2 rounded-xl"
         >
           <option value="">Sort</option>
           <option value="low">Low → High</option>
           <option value="high">High → Low</option>
         </select>
-
       </div>
 
       <div className="grid md:grid-cols-4 gap-10">
-
         {/* DESKTOP SIDEBAR */}
         <div className="space-y-8 hidden md:block">
-
           <h2 className="text-xl font-semibold">Filters</h2>
 
           {/* CATEGORY */}
@@ -97,18 +118,14 @@ const filteredProducts = products
 
             {categories.map((c) => (
               <label key={c.id} className="flex items-center gap-2 mb-2">
-
                 <input
                   type="radio"
                   name="category"
                   checked={filters.category === c.id}
-                  onChange={() =>
-                    setFilters({ ...filters, category: c.id })
-                  }
+                  onChange={() => setFilters({ ...filters, category: c.id })}
                 />
 
                 {c.name}
-
               </label>
             ))}
           </div>
@@ -119,9 +136,7 @@ const filteredProducts = products
 
             <select
               value={filters.sort}
-              onChange={(e) =>
-                setFilters({ ...filters, sort: e.target.value })
-              }
+              onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
               className="w-full border px-3 py-2 rounded"
             >
               <option value="">Default</option>
@@ -132,44 +147,48 @@ const filteredProducts = products
 
           {/* CLEAR */}
           <button
-            onClick={() =>
-              setFilters({ category: "", sort: "" })
-            }
+            onClick={() => setFilters({ category: "", sort: "" })}
             className="text-sm text-red-500"
           >
             Clear Filters
           </button>
-
         </div>
 
         {/* PRODUCTS */}
         <div className="md:col-span-3">
-
           {filteredProducts.length === 0 ? (
             <p className="text-gray-500">No products found</p>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:h-200 md:overflow-auto">
+              {loading
+                ? Array.from({ length: 8 }).map((_, i) => (
+                    <div className="bg-white rounded-3xl p-5 shadow-sm animate-pulse">
+                      {/* IMAGE */}
+                      <div className="w-full h-56 bg-gray-200 rounded-2xl"></div>
 
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+                      {/* TITLE */}
+                      <div className="mt-5 h-4 bg-gray-200 rounded w-3/4"></div>
 
+                      {/* PRICE */}
+                      <div className="mt-3 h-4 bg-gray-200 rounded w-1/4"></div>
+
+                      {/* CTA */}
+                      <div className="mt-5 h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  ))
+                : filteredProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
             </div>
           )}
-
         </div>
-
       </div>
 
       {/* MOBILE FILTER MODAL */}
       {showFilters && (
         <div className="fixed inset-0 bg-black/40 z-50 flex justify-end">
-
           <div className="bg-white w-80 h-full p-6 overflow-y-auto">
-
-            <h2 className="text-xl font-semibold mb-6">
-              Filters
-            </h2>
+            <h2 className="text-xl font-semibold mb-6">Filters</h2>
 
             {/* CATEGORY */}
             <div className="mb-6">
@@ -177,13 +196,10 @@ const filteredProducts = products
 
               {categories.map((c) => (
                 <label key={c.id} className="flex gap-2 mb-2">
-
                   <input
                     type="radio"
                     checked={filters.category === c.id}
-                    onChange={() =>
-                      setFilters({ ...filters, category: c.id })
-                    }
+                    onChange={() => setFilters({ ...filters, category: c.id })}
                   />
 
                   {c.name}
@@ -193,9 +209,7 @@ const filteredProducts = products
 
             {/* CLEAR */}
             <button
-              onClick={() =>
-                setFilters({ category: "", sort: "" })
-              }
+              onClick={() => setFilters({ category: "", sort: "" })}
               className="text-red-500 mb-6"
             >
               Clear Filters
@@ -203,7 +217,6 @@ const filteredProducts = products
 
             {/* ACTIONS */}
             <div className="flex gap-4">
-
               <button
                 onClick={() => setShowFilters(false)}
                 className="flex-1 border py-2 rounded"
@@ -217,14 +230,10 @@ const filteredProducts = products
               >
                 Apply
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 }

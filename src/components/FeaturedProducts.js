@@ -3,16 +3,36 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import products from "../data/products";
 import ProductCard from "./ProductCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import { useEffect, useState } from "react";
+import supabase from "@/lib/supabase";
 
 export default function FeaturedProducts() {
-  return (
-    <section className="py-32 bg-[#F5F5F7]">
+  const [products, setProducts] = useState([]);
 
+  const fetchProducts = async () => {
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("is_featured", true)
+    .order("created_at", { ascending: false });
+
+  if (!error) {
+    setProducts(data || []);
+  }
+};
+
+useEffect(() => {
+fetchProducts();
+},[]);
+
+  return ( <>
+      {products?.length > 0 && (
+    <section className="py-32 bg-[#F5F5F7]">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
@@ -60,15 +80,17 @@ export default function FeaturedProducts() {
             1280: { slidesPerView: 4 },
           }}
         >
-          {products.map((product) => (
+          {products?.map((product) => (
             <SwiperSlide key={product.id}>
-              <ProductCard product={product} />
+              <ProductCard product={product} height={'h-60'} />
             </SwiperSlide>
           ))}
         </Swiper>
 
       </div>
-
-    </section>
+      
+      </section>
+    )}
+  </>
   );
 }

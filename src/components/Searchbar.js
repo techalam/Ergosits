@@ -63,6 +63,7 @@ export default function SearchBar() {
   };
 
   return (
+    <>
     <div className="relative w-full">
 
       {/* INPUT */}
@@ -76,8 +77,10 @@ export default function SearchBar() {
       />
 
       {/* DROPDOWN */}
+
+    </div>
       {show && (products.length > 0 || categories.length > 0) && (
-        <div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-2xl border z-50 overflow-hidden">
+        <div className="absolute top-full mt-2 w-80 sm:w-100 bg-white rounded-2xl shadow-2xl border z-50 overflow-hidden">
 
           {/* PRODUCTS */}
           {products.length > 0 && (
@@ -136,7 +139,6 @@ export default function SearchBar() {
 
         </div>
       )}
-
-    </div>
+    </>
   );
 }

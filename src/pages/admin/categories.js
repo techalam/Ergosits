@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { useRouter } from "next/router";
 
 export default function Categories() {
 
@@ -10,6 +11,7 @@ export default function Categories() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [editingId, setEditingId] = useState(null);
+  const router = useRouter();
 
   // fetch
   const fetchCategories = async () => {

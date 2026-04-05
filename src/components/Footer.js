@@ -5,10 +5,11 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white">
 
-      <div className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-4 gap-12">
+      {/* TOP */}
+      <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-10">
 
         {/* BRAND */}
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <h2 className="text-2xl font-semibold mb-4">
             Ergosits
           </h2>
@@ -19,67 +20,116 @@ export default function Footer() {
           </p>
         </div>
 
-
         {/* SHOP */}
         <div>
           <h3 className="font-semibold mb-4">Shop</h3>
 
-          <ul className="space-y-3 text-gray-400 text-sm">
-            <li><Link href="/products">All Products</Link></li>
-            <li><Link href="/products">Laptop Stands</Link></li>
-            <li><Link href="/products">Mobile Stands</Link></li>
-            <li><Link href="/products">Tables</Link></li>
+          <ul className="space-y-2 text-gray-400 text-sm">
+            <li>
+              <Link href="/products" className="hover:text-white transition">
+                All Products
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/products?category=laptop" className="hover:text-white transition">
+                Laptop Stands
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/products?category=mobile" className="hover:text-white transition">
+                Mobile Stands
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/products?category=table" className="hover:text-white transition">
+                Tables
+              </Link>
+            </li>
           </ul>
         </div>
 
-
-        {/* COMPANY */}
+        {/* SUPPORT */}
         <div>
-          <h3 className="font-semibold mb-4">Company</h3>
+          <h3 className="font-semibold mb-4">Support</h3>
 
-          <ul className="space-y-3 text-gray-400 text-sm">
-            <li><Link href="/about">About Us</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
+          <ul className="space-y-2 text-gray-400 text-sm">
+            <li>
+              <Link href="/help" className="hover:text-white transition">
+                Help Center
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/contact" className="hover:text-white transition">
+                Contact Us
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/faq" className="hover:text-white transition">
+                FAQ
+              </Link>
+            </li>
           </ul>
         </div>
-
 
         {/* POLICIES */}
         <div>
           <h3 className="font-semibold mb-4">Policies</h3>
 
-          <ul className="space-y-3 text-gray-400 text-sm">
-            <li><Link href="/shipping-policy">Shipping Policy</Link></li>
-            <li><Link href="/refund-policy">Return & Refund</Link></li>
-            <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-            <li><Link href="/terms">Terms & Conditions</Link></li>
+          <ul className="space-y-2 text-gray-400 text-sm">
+            <li>
+              <Link href="/shipping" className="hover:text-white transition">
+                Shipping Policy
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/refund-policy" className="hover:text-white transition">
+                Return & Refund
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/privacy-policy" className="hover:text-white transition">
+                Privacy Policy
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/terms" className="hover:text-white transition">
+                Terms & Conditions
+              </Link>
+            </li>
           </ul>
         </div>
 
       </div>
 
-
-      {/* bottom bar */}
+      {/* BOTTOM */}
       <div className="border-t border-white/10">
 
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
 
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-400 text-sm text-center md:text-left">
             © {new Date().getFullYear()} Ergosits. All rights reserved.
           </p>
 
           {/* SOCIAL */}
-          <div className="flex gap-6 text-gray-400 text-lg">
+          <div className="flex gap-5 text-gray-400 text-lg">
 
-            <a href="#">
+            <a href="#" className="hover:text-white transition">
               <FaInstagram />
             </a>
 
-            <a href="#">
+            <a href="#" className="hover:text-white transition">
               <FaTwitter />
             </a>
 
-            <a href="#">
+            <a href="#" className="hover:text-white transition">
               <FaLinkedin />
             </a>
 

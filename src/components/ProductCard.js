@@ -2,36 +2,71 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, height = 'h-30' }) {
   return (
     <Link href={`/products/${product.slug}`}>
+
       <motion.div
-        whileHover={{ y: -12 }}
-        transition={{ type: "spring", stiffness: 200 }}
-        className=" bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl cursor-pointer group"
+        whileHover={{ y: -10 }}
+        transition={{ type: "spring", stiffness: 180 }}
+        className="bg-white rounded-3xl p-5 shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer group"
       >
-        <div className="relative w-full h-56 flex items-center justify-center">
+
+        {/* IMAGE */}
+        <div className={`relative w-full ${height} md:h-56 flex items-center justify-center overflow-hidden rounded-2xl bg-[#F5F5F7]`}>
+
+          {/* subtle glow */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 to-transparent opacity-40"></div>
+
           <motion.div
-            whileHover={{ rotate: 6, scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 200 }}
+            whileHover={{ scale: 1.08, rotate: 4 }}
+            transition={{ type: "spring", stiffness: 180 }}
           >
             <Image
               src={product.images?.[0] || "/placeholder.png"}
-              width={240}
-              height={240}
+              width={220}
+              height={220}
+              className="object-contain"
+              alt={product.name}
             />
           </motion.div>
+
         </div>
 
-        <h3 className="mt-6 text-lg font-semibold">{product.name}</h3>
-        <p className="text-gray-500 mt-1">₹{product.price}</p>
-
+        {/* CONTENT */}
         <div className="mt-5">
-          <span className="text-sm font-medium text-black border-b border-black opacity-70 group-hover:opacity-100">
-            View Product →
-          </span>
+
+          <h3 className="text-base font-semibold leading-snug line-clamp-2 group-hover:text-black transition">
+            {product.name}
+          </h3>
+
+          <p className="text-gray-500 text-sm mt-1">
+            ₹{product.price}
+          </p>
+
         </div>
+
+        {/* CTA */}
+        <div className="mt-4 overflow-hidden">
+
+          <span className="text-sm font-medium text-black inline-flex items-center gap-1 relative">
+
+            View Product
+
+            {/* arrow animation */}
+            <span className="transform group-hover:translate-x-1 transition">
+              →
+            </span>
+
+            {/* underline animation */}
+            <span className="absolute left-0 bottom-0 h-[1px] w-0 bg-black group-hover:w-full transition-all duration-300"></span>
+
+          </span>
+
+        </div>
+
       </motion.div>
+
     </Link>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useCart from "../lib/cartStore";
+import Swal from "sweetalert2";
 
 export default function Checkout() {
 
@@ -8,9 +9,19 @@ export default function Checkout() {
   const [form, setForm] = useState({
     name: "",
     phone: "",
+    email: "",
     address: "",
     city: "",
     pincode: "",
+  });
+
+  const [fieldsError, setFieldsError] = useState({
+    name: false,
+    phone: false,
+    email: false,
+    address: false,
+    city: false,
+    pincode: false,
   });
 
   // ---------------- TOTAL ----------------
@@ -24,8 +35,15 @@ export default function Checkout() {
 
 const handleSubmit = async () => {
 
-  if (!form.name || !form.phone || !form.address) {
-    alert("Fill all fields");
+  if (!form.name || !form.phone || !form.email || !form.address || !form.city || !form.pincode) {
+    setFieldsError({
+      name: !form.name,
+      phone: !form.phone,
+      email: !form.email,
+      address: !form.address,
+      city: !form.city,
+      pincode: !form.pincode,
+    });
     return;
   }
 
@@ -73,14 +91,24 @@ const handleSubmit = async () => {
         const result = await verify.json();
 
         if (result.success) {
-          alert("Order placed successfully 🎉");
+          Swal.fire({
+            title: "Order placed successfully 🎉",
+            text: "Your order has been placed and is being processed.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
 
           // clear cart
           useCart.getState().clearCart();
 
           window.location.href = "/success";
         } else {
-          alert("Payment verification failed");
+          Swal.fire({
+            title: "Payment Verification Failed",
+            text: "There was an issue with payment verification.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         }
       },
 
@@ -125,6 +153,7 @@ const handleSubmit = async () => {
               }
               className="w-full border px-4 py-3 rounded-xl"
             />
+            <p className={`text-sm text-red-500 ${fieldsError.name ? "block" : "hidden"}`}>Name Is Required</p>
 
             <input
               placeholder="Phone Number"
@@ -134,6 +163,17 @@ const handleSubmit = async () => {
               }
               className="w-full border px-4 py-3 rounded-xl"
             />
+            <p className={`text-sm text-red-500 ${fieldsError.phone ? "block" : "hidden"}`}>Please Enter A Valid Phone Number</p>
+
+              <input
+              placeholder="Email Address"
+              value={form.email}
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
+              className="w-full border px-4 py-3 rounded-xl"
+            />
+            <p className={`text-sm text-red-500 ${fieldsError.email ? "block" : "hidden"}`}>Please Enter A Valid Email Address</p>
 
             <textarea
               placeholder="Address"

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { useRouter } from "next/router";
 
 export default function Products() {
-
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -14,11 +14,16 @@ export default function Products() {
     description: "",
     price: "",
     category_id: "",
+    material: "",
+    dimensions: "",
+    color: "",
+    is_featured: false,
   });
 
   const [images, setImages] = useState([]); // new files
   const [preview, setPreview] = useState([]); // all images
   const [editingId, setEditingId] = useState(null);
+  const router = useRouter();
 
   // ---------------- FETCH ----------------
 
@@ -63,13 +68,9 @@ export default function Products() {
     for (let file of images) {
       const fileName = `product-${Date.now()}-${file.name}`;
 
-      await supabase.storage
-        .from("products")
-        .upload(fileName, file);
+      await supabase.storage.from("products").upload(fileName, file);
 
-      const { data } = supabase.storage
-        .from("products")
-        .getPublicUrl(fileName);
+      const { data } = supabase.storage.from("products").getPublicUrl(fileName);
 
       urls.push(data.publicUrl);
     }
@@ -80,13 +81,10 @@ export default function Products() {
   // ---------------- SUBMIT ----------------
 
   const handleSubmit = async () => {
-
     let imageUrls = [];
 
     // existing images (edit mode)
-    const existingImages = preview.filter((img) =>
-      img.startsWith("http")
-    );
+    const existingImages = preview.filter((img) => img.startsWith("http"));
 
     // new images
     const uploaded = await uploadImages();
@@ -100,20 +98,18 @@ export default function Products() {
           ...form,
           price: parseInt(form.price),
           images: imageUrls,
-          slug: form.name.toLowerCase().replaceAll(" ", "-")
+          slug: form.name.toLowerCase().replaceAll(" ", "-"),
         })
         .eq("id", editingId);
     } else {
-      await supabase
-        .from("products")
-        .insert([
-          {
-            ...form,
-            price: parseInt(form.price),
-            images: imageUrls,
-            slug: form.name.toLowerCase().replaceAll(" ", "-")
-          },
-        ]);
+      await supabase.from("products").insert([
+        {
+          ...form,
+          price: parseInt(form.price),
+          images: imageUrls,
+          slug: form.name.toLowerCase().replaceAll(" ", "-"),
+        },
+      ]);
     }
 
     // RESET
@@ -141,6 +137,10 @@ export default function Products() {
       description: p.description,
       price: p.price,
       category_id: p.category_id,
+      material: p.material || "",
+      dimensions: p.dimensions || "",
+      color: p.color || "",
+      is_featured: p.is_featured || false,
     });
 
     setPreview(p.images || []);
@@ -158,192 +158,204 @@ export default function Products() {
 
   return (
     <AdminLayout>
-    <div className="max-w-full sm:max-w-7xl mx-auto px-2 py-2 sm:px-6 sm:py-20">
+      <div className="max-w-full sm:max-w-7xl mx-auto px-2 py-2 sm:px-6 sm:py-20">
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-10">
+          <h1 className="text-4xl sm:text-xl font-semibold">Products</h1>
 
-      {/* HEADER */}
-      <div className="flex justify-between items-center mb-10">
-        <h1 className="text-4xl sm:text-xl font-semibold">Products</h1>
-
-        <button
-          onClick={() => setShowModal(true)}
-          className="px-3 sm:px-2 py-2 bg-black text-white rounded-xl"
-        >
-          + Add Product
-        </button>
-      </div>
-
-      {/* TABLE */}
-      <div className="bg-white rounded-2xl shadow overflow-auto">
-
-        <table className="w-full text-sm sm:text-base">
-
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-4">Image</th>
-              <th className="p-4">Name</th>
-              <th className="p-4">Price</th>
-              <th className="p-4">Category</th>
-              <th className="p-4">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {products.map((p) => (
-              <tr key={p.id} className="border-t">
-
-                <td className="p-4">
-                  {p.images?.[0] && (
-                    <img
-                      src={p.images[0]}
-                      className="w-12 h-12 object-cover rounded"
-                    />
-                  )}
-                </td>
-
-                <td className="p-4">{p.name}</td>
-                <td className="p-4">₹{p.price}</td>
-                <td className="p-4">{p.categories?.name}</td>
-
-                <td className="p-4 flex gap-4">
-                  <button
-                    onClick={() => handleEdit(p)}
-                    className="text-blue-500"
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(p.id)}
-                    className="text-red-500"
-                  >
-                    Delete
-                  </button>
-                </td>
-
-              </tr>
-            ))}
-          </tbody>
-
-        </table>
-
-      </div>
-
-      {/* MODAL */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
-
-          <div className="bg-white p-8 rounded-2xl w-full max-w-lg">
-
-            <h2 className="text-2xl font-semibold mb-6">
-              {editingId ? "Edit Product" : "Add Product"}
-            </h2>
-
-            <input
-              placeholder="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full border px-4 py-3 rounded-xl mb-4"
-            />
-
-            <textarea
-              placeholder="Description"
-              value={form.description}
-              onChange={(e) =>
-                setForm({ ...form, description: e.target.value })
-              }
-              className="w-full border px-4 py-3 rounded-xl mb-4"
-            />
-
-            <input
-              type="number"
-              placeholder="Price"
-              value={form.price}
-              onChange={(e) =>
-                setForm({ ...form, price: e.target.value })
-              }
-              className="w-full border px-4 py-3 rounded-xl mb-4"
-            />
-
-            {/* CATEGORY */}
-            <select
-              value={form.category_id}
-              onChange={(e) =>
-                setForm({ ...form, category_id: e.target.value })
-              }
-              className="w-full border px-4 py-3 rounded-xl mb-4"
-            >
-              <option value="">Select Category</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-
-            {/* IMAGE UPLOAD */}
-            <input
-              type="file"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files);
-
-                setImages((prev) => [...prev, ...files]);
-
-                const newPreview = files.map((f) =>
-                  URL.createObjectURL(f)
-                );
-
-                setPreview((prev) => [...prev, ...newPreview]);
-              }}
-              className="mb-4"
-            />
-
-            {/* PREVIEW */}
-            <div className="flex gap-3 flex-wrap mb-4">
-              {preview.map((img, i) => (
-                <div key={i} className="relative">
-
-                  <img
-                    src={img}
-                    className="w-20 h-20 object-cover rounded"
-                  />
-
-                  <button
-                    onClick={() => removeImage(i)}
-                    className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full"
-                  >
-                    ×
-                  </button>
-
-                </div>
-              ))}
-            </div>
-
-            {/* ACTIONS */}
-            <div className="flex justify-end gap-4">
-
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 border rounded-xl"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={handleSubmit}
-                className="px-6 py-2 bg-black text-white rounded-xl"
-              >
-                Save
-              </button>
-
-            </div>
-
-          </div>
-
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-3 sm:px-2 py-2 bg-black text-white rounded-xl"
+          >
+            + Add Product
+          </button>
         </div>
-      )}
 
-    </div>
+        {/* TABLE */}
+        <div className="bg-white rounded-2xl shadow overflow-auto">
+          <table className="w-full text-sm sm:text-base">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-4">Image</th>
+                <th className="p-4">Name</th>
+                <th className="p-4">Price</th>
+                <th className="p-4">Category</th>
+                <th className="p-4">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {products.map((p) => (
+                <tr key={p.id} className="border-t">
+                  <td className="p-4">
+                    {p.images?.[0] && (
+                      <img
+                        src={p.images[0]}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                    )}
+                  </td>
+
+                  <td className="p-4">{p.name}</td>
+                  <td className="p-4">₹{p.price}</td>
+                  <td className="p-4">{p.categories?.name}</td>
+
+                  <td className="p-4 flex gap-4">
+                    <button
+                      onClick={() => handleEdit(p)}
+                      className="text-blue-500"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="text-red-500"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* MODAL */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
+            <div className="bg-white p-8 rounded-2xl w-full max-w-lg">
+              <h2 className="text-2xl font-semibold mb-6">
+                {editingId ? "Edit Product" : "Add Product"}
+              </h2>
+
+              <input
+                placeholder="Name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full border px-4 py-3 rounded-xl mb-4"
+              />
+
+              <textarea
+                placeholder="Description"
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+                className="w-full border px-4 py-3 rounded-xl mb-4"
+              />
+
+              <input
+                type="number"
+                placeholder="Price"
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+                className="w-full border px-4 py-3 rounded-xl mb-4"
+              />
+
+              {/* CATEGORY */}
+              <select
+                value={form.category_id}
+                onChange={(e) =>
+                  setForm({ ...form, category_id: e.target.value })
+                }
+                className="w-full border px-4 py-3 rounded-xl mb-4"
+              >
+                <option value="">Select Category</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                placeholder="Material (e.g. Aluminum)"
+                value={form.material}
+                onChange={(e) => setForm({ ...form, material: e.target.value })}
+                className="w-full border px-4 py-3 rounded-xl mb-3"
+              />
+
+              <input
+                placeholder="Dimensions (e.g. 30x20 cm)"
+                value={form.dimensions}
+                onChange={(e) =>
+                  setForm({ ...form, dimensions: e.target.value })
+                }
+                className="w-full border px-4 py-3 rounded-xl mb-3"
+              />
+
+              <input
+                placeholder="Color (e.g. Black)"
+                value={form.color}
+                onChange={(e) => setForm({ ...form, color: e.target.value })}
+                className="w-full border px-4 py-3 rounded-xl mb-3"
+              />
+
+              {/* FEATURED TOGGLE */}
+              <div className="flex items-center gap-3 mb-4">
+                <input
+                  type="checkbox"
+                  checked={form.is_featured}
+                  onChange={(e) =>
+                    setForm({ ...form, is_featured: e.target.checked })
+                  }
+                />
+                <label className="text-sm">Mark as Featured</label>
+              </div>
+
+              {/* IMAGE UPLOAD */}
+              <input
+                type="file"
+                multiple
+                onChange={(e) => {
+                  const files = Array.from(e.target.files);
+
+                  setImages((prev) => [...prev, ...files]);
+
+                  const newPreview = files.map((f) => URL.createObjectURL(f));
+
+                  setPreview((prev) => [...prev, ...newPreview]);
+                }}
+                className="mb-4"
+              />
+
+              {/* PREVIEW */}
+              <div className="flex gap-3 flex-wrap mb-4">
+                {preview.map((img, i) => (
+                  <div key={i} className="relative">
+                    <img src={img} className="w-20 h-20 object-cover rounded" />
+
+                    <button
+                      onClick={() => removeImage(i)}
+                      className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* ACTIONS */}
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 border rounded-xl"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleSubmit}
+                  className="px-6 py-2 bg-black text-white rounded-xl"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </AdminLayout>
   );
 }
