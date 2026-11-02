@@ -4,6 +4,12 @@ Admin access is granted to individual Supabase Auth users with the trusted
 `app_metadata.role` value `admin`. A user's editable `user_metadata` is not
 used for authorization.
 
+Admin screens are available only in the installed Ergosits Admin PWA. Install
+the app from the public website, then launch it to sign in. Regular browser
+tabs always show the public website and redirect `/admin` routes to `/`, even
+when the browser shares an authenticated admin session. The installed PWA
+keeps navigation inside the admin area and requires an admin login.
+
 ## Add an admin account
 
 1. In Supabase, open **Authentication → Users** and invite or create the user.
@@ -18,7 +24,7 @@ set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb)
 where id = 'REPLACE-WITH-AUTH-USER-UUID';
 ```
 
-3. Have the user sign in at `/admin/login`. If they already had an active
+3. Have the user launch the installed PWA and sign in at `/admin/login`. If they already had an active
    session, sign out and back in so the refreshed session contains the role.
 
 To remove admin access, run:

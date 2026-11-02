@@ -3,27 +3,30 @@ import { useRouter } from "next/router";
 import supabase from "@/lib/supabase";
 import { isAdmin } from "@/lib/adminAuth";
 import Loader from "./admin/Loader";
+import { getAdminDestination, isAdminRoute } from "@/lib/adminRouting.mjs";
 
 export default function AdminBoundary({ children }) {
   const router = useRouter();
   const [checkedPath, setCheckedPath] = useState(null);
   const [error, setError] = useState(false);
-  const adminRoute = router.pathname === "/admin" || router.pathname.startsWith("/admin/");
+  const adminRoute = isAdminRoute(router.pathname);
 
   useEffect(() => {
     let active = true;
     let revision = 0;
+    const displayMode = window.matchMedia("(display-mode: standalone)");
     const check = async () => {
       const current = ++revision;
       try {
-        const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
-        const { data } = await supabase.auth.getSession();
-        const admin = data.session ? await isAdmin() : false;
+        const standalone = displayMode.matches || window.navigator.standalone === true;
+        let admin = false;
+        // Browser tabs only serve the storefront, regardless of any saved login.
+        if (standalone) {
+          const { data } = await supabase.auth.getSession();
+          admin = data.session ? await isAdmin() : false;
+        }
         if (!active || current !== revision) return;
-        let destination;
-        if (admin && (!adminRoute || router.pathname === "/admin/login")) destination = "/admin/dashboard";
-        else if (standalone && !adminRoute) destination = admin ? "/admin/dashboard" : "/admin/login";
-        else if (adminRoute && router.pathname !== "/admin/login" && !admin) destination = "/admin/login";
+        const destination = getAdminDestination({ pathname: router.pathname, standalone, admin });
         if (destination) {
           setCheckedPath(null);
           await router.replace(destination);
@@ -32,6 +35,11 @@ export default function AdminBoundary({ children }) {
         if (active && current === revision) setError(true);
       }
     };
+    const handleDisplayChange = () => {
+      setCheckedPath(null);
+      check();
+    };
+    displayMode.addEventListener("change", handleDisplayChange);
     check();
     // Defer Supabase calls until the auth callback releases its internal lock.
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
@@ -39,7 +47,11 @@ export default function AdminBoundary({ children }) {
       if (event === "SIGNED_OUT" && adminRoute && router.pathname !== "/admin/login") setCheckedPath(null);
       setTimeout(() => { if (active) check(); }, 0);
     });
-    return () => { active = false; listener.subscription.unsubscribe(); };
+    return () => {
+      active = false;
+      displayMode.removeEventListener("change", handleDisplayChange);
+      listener.subscription.unsubscribe();
+    };
   }, [router.asPath, router.pathname, adminRoute, router]);
 
   if (error) return (
