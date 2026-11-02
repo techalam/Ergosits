@@ -6,17 +6,17 @@ export default function RefundPolicy() {
         Return & Refund Policy
       </h1>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         If you receive a damaged or defective product, please contact
         us within 48 hours of delivery.
       </p>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         After verification, we will provide a replacement or refund
         depending on the situation.
       </p>
 
-      <p className="text-gray-600 leading-relaxed">
+      <p className="text-muted leading-relaxed">
         Items must be unused and returned in original packaging.
       </p>
 

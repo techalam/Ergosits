@@ -16,7 +16,7 @@ export default function Contact() {
           Contact Us
         </motion.h1>
 
-        <p className="mt-6 text-gray-500 text-lg">
+        <p className="mt-6 text-muted text-lg">
           Have questions about our products or your order?  
           We're here to help.
         </p>
@@ -73,7 +73,7 @@ export default function Contact() {
             Support
           </h2>
 
-          <p className="text-gray-500 mb-8 leading-relaxed">
+          <p className="text-muted mb-8 leading-relaxed">
             Our team usually responds within 24 hours.
             Feel free to reach out for product questions,
             bulk orders or support.
@@ -83,17 +83,17 @@ export default function Contact() {
 
             <div>
               <h3 className="font-semibold">Email</h3>
-              <p className="text-gray-500">support@ergosits.com</p>
+              <p className="text-muted">support@ergosits.com</p>
             </div>
 
             <div>
               <h3 className="font-semibold">Phone</h3>
-              <p className="text-gray-500">+91 00000 00000</p>
+              <p className="text-muted">+91 00000 00000</p>
             </div>
 
             <div>
               <h3 className="font-semibold">Working Hours</h3>
-              <p className="text-gray-500">
+              <p className="text-muted">
                 Monday – Saturday  
                 10:00 AM – 6:00 PM
               </p>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import { useRouter } from "next/router";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { requireAdmin } from "../../lib/adminAuth";
 
 export default function Orders() {
 
@@ -13,11 +14,7 @@ export default function Orders() {
   // 🔐 Protect route
   useEffect(() => {
     const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-
-      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
-        router.push("/admin/login");
-      }
+      if (await requireAdmin(router)) fetchOrders();
     };
 
     checkUser();
@@ -33,10 +30,6 @@ export default function Orders() {
     setOrders(data || []);
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
   return (
     <AdminLayout>
     <div className="max-w-full sm:max-w-7xl mx-auto px-2 py-2 sm:px-6 sm:py-20">
@@ -46,11 +39,11 @@ export default function Orders() {
       </h1>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl shadow overflow-auto">
+      <div className="bg-surface rounded-2xl shadow overflow-auto">
 
         <table className="w-full text-sm sm:text-base">
 
-          <thead className="bg-gray-100 text-left">
+          <thead className="bg-canvas text-left">
             <tr>
               <th className="p-4">Customer</th>
               <th className="p-4">Phone</th>
@@ -92,7 +85,7 @@ export default function Orders() {
       {selectedOrder && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
 
-          <div className="bg-white p-8 rounded-2xl w-full max-w-2xl">
+          <div className="bg-surface p-8 rounded-2xl w-full max-w-2xl">
 
             <h2 className="text-2xl font-semibold mb-6">
               Order Details
@@ -126,7 +119,7 @@ export default function Orders() {
 
                       <div>
                         <p>{item.name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted">
                           Qty: {item.qty}
                         </p>
                       </div>

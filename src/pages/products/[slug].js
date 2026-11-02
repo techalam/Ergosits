@@ -53,7 +53,7 @@ export default function ProductPage() {
         {/* LEFT - IMAGES */}
         <div>
 
-          <div className="bg-[#F5F5F7] rounded-2xl p-6 flex justify-center">
+          <div className="bg-canvas rounded-2xl p-6 flex justify-center">
             <img
               src={product.images?.[activeImage]}
               className="h-80 object-contain"
@@ -88,7 +88,7 @@ export default function ProductPage() {
             ₹{product.price}
           </p>
 
-          <p className="text-gray-500 mt-4">
+          <p className="text-muted mt-4">
             {product.description}
           </p>
 

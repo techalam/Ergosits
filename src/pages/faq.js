@@ -10,17 +10,17 @@ export default function FAQ() {
 
         <div>
           <h2 className="font-medium">How long does delivery take?</h2>
-          <p className="text-gray-600 mt-1">3-5 business days.</p>
+          <p className="text-muted mt-1">3-5 business days.</p>
         </div>
 
         <div>
           <h2 className="font-medium">Can I return a product?</h2>
-          <p className="text-gray-600 mt-1">Yes, within 7 days.</p>
+          <p className="text-muted mt-1">Yes, within 7 days.</p>
         </div>
 
         <div>
           <h2 className="font-medium">Do you offer COD?</h2>
-          <p className="text-gray-600 mt-1">Currently online payments only.</p>
+          <p className="text-muted mt-1">Currently online payments only.</p>
         </div>
 
       </div>

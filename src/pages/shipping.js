@@ -6,7 +6,7 @@ export default function Shipping() {
         Shipping Policy
       </h1>
 
-      <p className="text-gray-600">
+      <p className="text-muted">
         Orders are processed within 24 hours and delivered within 3–5 working days.
       </p>
 

@@ -217,7 +217,7 @@ const handleSubmit = async () => {
             Order Summary
           </h2>
 
-          <div className="bg-[#F5F5F7] p-6 rounded-2xl">
+          <div className="bg-canvas p-6 rounded-2xl">
 
             {/* ITEMS */}
             <div className="space-y-4">
@@ -237,7 +237,7 @@ const handleSubmit = async () => {
 
                     <div>
                       <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted">
                         Qty: {item.qty}
                       </p>
                     </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { useRouter } from "next/router";
+import { requireAdmin } from "../../lib/adminAuth";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -48,13 +49,10 @@ export default function Products() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-
-      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
-        return router.push("/admin/login");
+      if (await requireAdmin(router)) {
+        fetchProducts();
+        fetchCategories();
       }
-      fetchProducts();
-      fetchCategories();
     };
 
     checkUser();
@@ -172,9 +170,9 @@ export default function Products() {
         </div>
 
         {/* TABLE */}
-        <div className="bg-white rounded-2xl shadow overflow-auto">
+        <div className="bg-surface rounded-2xl shadow overflow-auto">
           <table className="w-full text-sm sm:text-base">
-            <thead className="bg-gray-100">
+            <thead className="bg-canvas">
               <tr>
                 <th className="p-4">Image</th>
                 <th className="p-4">Name</th>
@@ -224,7 +222,7 @@ export default function Products() {
         {/* MODAL */}
         {showModal && (
           <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
-            <div className="bg-white p-8 rounded-2xl w-full max-w-lg">
+            <div className="bg-surface p-8 rounded-2xl w-full max-w-lg">
               <h2 className="text-2xl font-semibold mb-6">
                 {editingId ? "Edit Product" : "Add Product"}
               </h2>

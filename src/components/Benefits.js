@@ -27,7 +27,7 @@ const benefits = [
 
 export default function Benefits() {
   return (
-    <section className="py-32 bg-white">
+    <section className="py-32 bg-surface">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Heading */}
@@ -41,7 +41,7 @@ export default function Benefits() {
           <h2 className="text-4xl md:text-5xl font-semibold">
             Why Your Body Will Thank You
           </h2>
-          <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
+          <p className="text-muted mt-4 max-w-2xl mx-auto">
             Ergonomic improvements may look small, but they dramatically change
             how you feel after hours of working or studying.
           </p>
@@ -56,15 +56,15 @@ export default function Benefits() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2, duration: 0.8 }}
-              className="bg-[#F5F5F7] rounded-3xl p-8 text-center hover:shadow-xl transition"
+              className="bg-canvas rounded-3xl p-8 text-center hover:shadow-xl transition"
             >
-              <div className="flex justify-center mb-6 text-black">
+              <div className="flex justify-center mb-6 text-foreground">
                 {item.icon}
               </div>
 
               <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
 
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-muted text-sm leading-relaxed">
                 {item.desc}
               </p>
             </motion.div>

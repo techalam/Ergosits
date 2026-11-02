@@ -73,25 +73,25 @@ export default function SearchBar() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => query.length > 1 && setShow(true)}
-        className="w-full px-5 py-3 rounded-full bg-[#F5F5F7] outline-none"
+        className="w-full px-5 py-3 rounded-full bg-canvas outline-none"
       />
 
       {/* DROPDOWN */}
 
     </div>
       {show && (products.length > 0 || categories.length > 0) && (
-        <div className="absolute top-full mt-2 w-80 sm:w-100 bg-white rounded-2xl shadow-2xl border z-50 overflow-hidden">
+        <div className="absolute top-full mt-2 w-80 sm:w-100 bg-surface rounded-2xl shadow-2xl border z-50 overflow-hidden">
 
           {/* PRODUCTS */}
           {products.length > 0 && (
             <div>
-              <p className="px-4 py-2 text-xs text-gray-500">Products</p>
+              <p className="px-4 py-2 text-xs text-muted">Products</p>
 
               {products.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => goToProduct(item.slug)}
-                  className="flex items-center gap-4 px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                  className="flex items-center gap-4 px-4 py-3 hover:bg-canvas cursor-pointer"
                 >
                   <img
                     src={item.images?.[0]}
@@ -100,7 +100,7 @@ export default function SearchBar() {
 
                   <div>
                     <p className="text-sm font-medium">{item.name}</p>
-                    <p className="text-xs text-gray-500">₹{item.price}</p>
+                    <p className="text-xs text-muted">₹{item.price}</p>
                   </div>
                 </div>
               ))}
@@ -110,13 +110,13 @@ export default function SearchBar() {
           {/* CATEGORIES */}
           {categories.length > 0 && (
             <div className="border-t">
-              <p className="px-4 py-2 text-xs text-gray-500">Categories</p>
+              <p className="px-4 py-2 text-xs text-muted">Categories</p>
 
               {categories.map((c) => (
                 <div
                   key={c.id}
                   onClick={() => goToCategory(c.id)}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-canvas cursor-pointer"
                 >
                   <img
                     src={c.image}
@@ -132,7 +132,7 @@ export default function SearchBar() {
           {/* SEARCH ALL */}
           <div
             onClick={handleSearch}
-            className="px-4 py-3 border-t text-sm hover:bg-gray-100 cursor-pointer"
+            className="px-4 py-3 border-t text-sm hover:bg-canvas cursor-pointer"
           >
             🔍 Search for "{query}"
           </div>

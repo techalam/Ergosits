@@ -32,7 +32,7 @@ fetchProducts();
 
   return ( <>
       {products?.length > 0 && (
-    <section className="py-32 bg-[#F5F5F7]">
+    <section className="py-32 bg-canvas">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
@@ -43,7 +43,7 @@ fetchProducts();
               Featured Products
             </h2>
 
-            <p className="text-gray-500 mt-4">
+            <p className="text-muted mt-4">
               Upgrade your workspace with ergonomic essentials.
             </p>
           </div>
@@ -51,11 +51,11 @@ fetchProducts();
           {/* Arrows */}
           <div className="flex gap-4">
 
-            <button className="prev w-12 h-12 rounded-full bg-white shadow flex items-center justify-center hover:bg-black hover:text-white transition">
+            <button className="prev w-12 h-12 rounded-full bg-surface shadow flex items-center justify-center hover:bg-black hover:text-white transition">
               <FaChevronLeft />
             </button>
 
-            <button className="next w-12 h-12 rounded-full bg-white shadow flex items-center justify-center hover:bg-black hover:text-white transition">
+            <button className="next w-12 h-12 rounded-full bg-surface shadow flex items-center justify-center hover:bg-black hover:text-white transition">
               <FaChevronRight />
             </button>
 

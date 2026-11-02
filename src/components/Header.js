@@ -31,7 +31,7 @@ export default function Header() {
   };
 
   return (
-    <div className="bg-white border-b sticky top-0 z-50">
+    <div className="bg-surface border-b sticky top-0 z-50">
 
       {/* TOP BAR */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -90,7 +90,7 @@ export default function Header() {
             <Link
               key={c.id}
               href={`/products?category=${c.id}`}
-              className="text-gray-600 hover:text-black"
+              className="text-muted hover:text-foreground"
             >
               {c.name}
             </Link>

@@ -9,11 +9,11 @@ export default function ProductCard({ product, height = 'h-30' }) {
       <motion.div
         whileHover={{ y: -10 }}
         transition={{ type: "spring", stiffness: 180 }}
-        className="bg-white rounded-3xl p-5 shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+        className="bg-surface rounded-3xl p-5 shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer group"
       >
 
         {/* IMAGE */}
-        <div className={`relative w-full ${height} md:h-56 flex items-center justify-center overflow-hidden rounded-2xl bg-[#F5F5F7]`}>
+        <div className={`relative w-full ${height} md:h-56 flex items-center justify-center overflow-hidden rounded-2xl bg-canvas`}>
 
           {/* subtle glow */}
           <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 to-transparent opacity-40"></div>
@@ -36,11 +36,11 @@ export default function ProductCard({ product, height = 'h-30' }) {
         {/* CONTENT */}
         <div className="mt-5">
 
-          <h3 className="text-base font-semibold leading-snug line-clamp-2 group-hover:text-black transition">
+          <h3 className="text-base font-semibold leading-snug line-clamp-2 group-hover:text-foreground transition">
             {product.name}
           </h3>
 
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-muted text-sm mt-1">
             ₹{product.price}
           </p>
 
@@ -49,7 +49,7 @@ export default function ProductCard({ product, height = 'h-30' }) {
         {/* CTA */}
         <div className="mt-4 overflow-hidden">
 
-          <span className="text-sm font-medium text-black inline-flex items-center gap-1 relative">
+          <span className="text-sm font-medium text-foreground inline-flex items-center gap-1 relative">
 
             View Product
 

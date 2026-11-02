@@ -10,7 +10,7 @@ export default function MenuOverlay({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] bg-white/80 backdrop-blur-xl flex"
+          className="fixed inset-0 z-[100] bg-surface/80 backdrop-blur-xl flex"
         >
 
           {/* RIGHT SIDE MENU */}

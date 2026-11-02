@@ -6,7 +6,7 @@ export default function Success() {
         🎉 Order Successful!
       </h1>
 
-      <p className="text-gray-500">
+      <p className="text-muted">
         Thank you for shopping with us.
       </p>
 

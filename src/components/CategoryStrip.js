@@ -20,17 +20,17 @@ export default function CategoryStrip() {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <div className="max-w-7xl mx-auto px-6 pb-6 overflow-x-auto scrollbar-hide">
         <div className="flex gap-4 items-center">
           {loading
             ? Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="flex flex-col items-center animate-pulse min-w-[90px]">
                   {/* circle */}
-                  <div className="w-16 h-16 rounded-full bg-gray-200"></div>
+                  <div className="w-16 h-16 rounded-full bg-subtle"></div>
 
                   {/* text */}
-                  <div className="mt-3 h-3 w-12 bg-gray-200 rounded"></div>
+                  <div className="mt-3 h-3 w-12 bg-subtle rounded"></div>
                 </div>
               ))
             : categories.map((c) => {
@@ -44,7 +44,7 @@ export default function CategoryStrip() {
                   >
                     {/* ICON */}
                     <div
-                      className={`w-16 h-16 rounded-full bg-[#F5F5F7] flex items-center justify-center transition
+                      className={`w-16 h-16 rounded-full bg-canvas flex items-center justify-center transition
                   ${active ? "ring-2 ring-black scale-110" : ""}`}
                     >
                       <img

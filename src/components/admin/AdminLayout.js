@@ -1,5 +1,14 @@
 import { useRouter } from "next/router";
 import supabase from "../../lib/supabase";
+import ThemeToggle from "../ThemeToggle";
+import { FiGrid, FiFolder, FiPackage, FiShoppingBag } from "react-icons/fi";
+
+const navigation = [
+  { path: "/admin/dashboard", label: "Dashboard", Icon: FiGrid },
+  { path: "/admin/categories", label: "Categories", Icon: FiFolder },
+  { path: "/admin/products", label: "Products", Icon: FiPackage },
+  { path: "/admin/orders", label: "Orders", Icon: FiShoppingBag },
+];
 
 export default function AdminLayout({ children }) {
 
@@ -7,92 +16,57 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/admin/login");
+    router.replace("/admin/login");
   };
 
   const isActive = (path) => router.pathname === path;
 
+
   return (
-    <div className="min-h-screen bg-[#F5F5F7] text-black">
+    <div className="min-h-screen bg-canvas text-foreground">
 
       {/* HEADER */}
-      <div className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b">
+      <div className="sticky top-0 z-50 backdrop-blur bg-surface/70 border-b">
 
         <div className="flex justify-between items-center px-4 py-3">
 
           <div>
             <h1 className="text-lg font-semibold">Ergosits</h1>
-            <p className="text-xs text-gray-500">Admin Panel</p>
+            <p className="text-xs text-muted">Admin Panel</p>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="text-sm px-3 py-1 rounded-full border hover:bg-black hover:text-white transition"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              onClick={handleLogout}
+              className="text-sm px-3 py-1 rounded-full border hover:bg-black hover:text-white transition"
+            >
+              Logout
+            </button>
+          </div>
 
         </div>
 
       </div>
 
       {/* CONTENT */}
-      <div className="px-4 py-6 pb-28">
+      <div className="max-w-7xl mx-auto px-4 py-6 pb-28">
         {children}
       </div>
 
       {/* BOTTOM NAV */}
-      <div className="fixed bottom-0 left-0 right-0 z-50">
+      <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[env(safe-area-inset-bottom)]">
 
-        <div className="mx-4 mb-4 bg-white rounded-2xl shadow-lg border flex justify-between px-2 py-2">
+        <div className="max-w-xl mx-auto mb-4 bg-surface rounded-2xl shadow-lg border flex justify-between px-2 py-2">
 
-          <button
-            onClick={() => router.push("/admin/dashboard")}
-            className={`flex-1 flex flex-col items-center text-xs py-2 rounded-xl ${
-              isActive("/admin/dashboard")
-                ? "bg-black text-white"
-                : "text-gray-500"
-            }`}
-          >
-            📊
-            <span>Dashboard</span>
-          </button>
-
-          <button
-            onClick={() => router.push("/admin/categories")}
-            className={`flex-1 flex flex-col items-center text-xs py-2 rounded-xl ${
-              isActive("/admin/categories")
-                ? "bg-black text-white"
-                : "text-gray-500"
-            }`}
-          >
-            🗂
-            <span>Categories</span>
-          </button>
-
-          <button
-            onClick={() => router.push("/admin/products")}
-            className={`flex-1 flex flex-col items-center text-xs py-2 rounded-xl ${
-              isActive("/admin/products")
-                ? "bg-black text-white"
-                : "text-gray-500"
-            }`}
-          >
-            📦
-            <span>Products</span>
-          </button>
-
-          <button
-            onClick={() => router.push("/admin/orders")}
-            className={`flex-1 flex flex-col items-center text-xs py-2 rounded-xl ${
-              isActive("/admin/orders")
-                ? "bg-black text-white"
-                : "text-gray-500"
-            }`}
-          >
-            🧾
-            <span>Orders</span>
-          </button>
+          {navigation.map(({ path, label, Icon }) => (
+            <button key={path} onClick={() => router.push(path)}
+              aria-current={isActive(path) ? "page" : undefined}
+              className={`flex-1 flex flex-col items-center gap-1.5 text-xs py-2.5 rounded-xl transition ${isActive(path) ? "bg-black text-white" : "text-muted hover:bg-canvas"}`}>
+              <Icon size={19} />
+              <span>{label}</span>
+            </button>
+          ))}
 
         </div>
 

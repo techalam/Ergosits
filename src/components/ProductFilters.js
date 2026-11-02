@@ -11,7 +11,7 @@ export default function ProductFilters({ active, setActive }) {
             ${
               active === filter
                 ? "bg-black text-white"
-                : "bg-gray-100 hover:bg-gray-200"
+                : "bg-canvas hover:bg-subtle"
             }`}
         >
           {filter.charAt(0).toUpperCase() + filter.slice(1)}

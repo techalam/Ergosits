@@ -3,6 +3,7 @@ import supabase from "../../lib/supabase";
 import AdminLayout from "../../components/admin/AdminLayout";
 import Loader from "../../components/admin/Loader";
 import { useRouter } from "next/router";
+import { requireAdmin } from "../../lib/adminAuth";
 
 export default function Dashboard() {
 
@@ -24,12 +25,7 @@ export default function Dashboard() {
     // 🔐 Protect route
   useEffect(() => {
     const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-
-      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
-        return router.push("/admin/login");
-      }
-      loadData();
+      if (await requireAdmin(router)) loadData();
     };
 
     checkUser();
@@ -80,29 +76,29 @@ export default function Dashboard() {
       {/* STATS */}
       <div className="grid grid-cols-2 gap-4 mb-6">
 
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <p className="text-sm text-gray-500">Revenue</p>
+        <div className="bg-surface p-4 rounded-2xl shadow">
+          <p className="text-sm text-muted">Revenue</p>
           <h2 className="text-xl font-semibold">
             ₹{stats.revenue}
           </h2>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <p className="text-sm text-gray-500">Orders</p>
+        <div className="bg-surface p-4 rounded-2xl shadow">
+          <p className="text-sm text-muted">Orders</p>
           <h2 className="text-xl font-semibold">
             {stats.orders}
           </h2>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <p className="text-sm text-gray-500">Products</p>
+        <div className="bg-surface p-4 rounded-2xl shadow">
+          <p className="text-sm text-muted">Products</p>
           <h2 className="text-xl font-semibold">
             {stats.products}
           </h2>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <p className="text-sm text-gray-500">Avg Order</p>
+        <div className="bg-surface p-4 rounded-2xl shadow">
+          <p className="text-sm text-muted">Avg Order</p>
           <h2 className="text-xl font-semibold">
             ₹{stats.orders ? Math.round(stats.revenue / stats.orders) : 0}
           </h2>
@@ -111,7 +107,7 @@ export default function Dashboard() {
       </div>
 
       {/* RECENT ORDERS */}
-      <div className="bg-white rounded-2xl shadow p-4">
+      <div className="bg-surface rounded-2xl shadow p-4">
 
         <h2 className="text-lg font-semibold mb-4">
           Recent Orders
@@ -126,7 +122,7 @@ export default function Dashboard() {
             >
               <div>
                 <p className="font-medium">{order.name}</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   {new Date(order.created_at).toLocaleDateString()}
                 </p>
               </div>

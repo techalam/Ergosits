@@ -6,16 +6,16 @@ export default function ShippingPolicy() {
         Shipping Policy
       </h1>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         Orders are processed within 24–48 hours after payment confirmation.
       </p>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         Delivery time usually ranges between 3–7 business days depending
         on your location within India.
       </p>
 
-      <p className="text-gray-600 leading-relaxed">
+      <p className="text-muted leading-relaxed">
         You will receive tracking details via email once your order
         has been dispatched.
       </p>

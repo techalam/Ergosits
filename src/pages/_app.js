@@ -1,15 +1,19 @@
 import "../styles/globals.css";
 import Layout from "../components/Layout";
 import SmoothScroll from "@/components/SmoothScroll";
-import Cursor from "@/components/Cursor";
+import ThemeProvider from "@/components/ThemeProvider";
+import AdminBoundary from "@/components/AdminBoundary";
+import { useRouter } from "next/router";
 
 export default function MyApp({ Component, pageProps }) {
+  const { pathname } = useRouter();
+  const page = <Component {...pageProps} />;
+  const adminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
   return (
-    <SmoothScroll>
-      {/* <Cursor /> */}
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-    </SmoothScroll>
+    <ThemeProvider>
+      <AdminBoundary>
+        {adminRoute ? page : <SmoothScroll><Layout>{page}</Layout></SmoothScroll>}
+      </AdminBoundary>
+    </ThemeProvider>
   );
 }

@@ -30,7 +30,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="mt-6 text-lg text-gray-500 max-w-md"
+            className="mt-6 text-lg text-muted max-w-md"
           >
             Premium ergonomic stands & workspace essentials designed
             to improve posture, comfort and productivity.
@@ -93,7 +93,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="sm:mt-6 sm:text-lg text-gray-500 max-w-md"
+            className="sm:mt-6 sm:text-lg text-muted max-w-md"
           >
             Premium ergonomic stands & workspace essentials designed
             to improve posture, comfort and productivity.

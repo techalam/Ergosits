@@ -6,7 +6,7 @@ export default function Help() {
         Help Center
       </h1>
 
-      <div className="space-y-6 text-gray-600">
+      <div className="space-y-6 text-muted">
 
         <p>
           Welcome to Ergosits support. We're here to help you with orders, products, and general queries.

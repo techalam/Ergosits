@@ -6,17 +6,17 @@ export default function PrivacyPolicy() {
         Privacy Policy
       </h1>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         We respect your privacy and ensure that your personal
         information is protected.
       </p>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         Information such as name, email and shipping address
         is only used for order processing and communication.
       </p>
 
-      <p className="text-gray-600 leading-relaxed">
+      <p className="text-muted leading-relaxed">
         We never sell or share your personal data with third parties.
       </p>
 

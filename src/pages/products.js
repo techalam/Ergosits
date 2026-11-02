@@ -157,23 +157,23 @@ export default function Products() {
         {/* PRODUCTS */}
         <div className="md:col-span-3">
           {filteredProducts.length === 0 ? (
-            <p className="text-gray-500">No products found</p>
+            <p className="text-muted">No products found</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:h-200 md:overflow-auto">
               {loading
                 ? Array.from({ length: 8 }).map((_, i) => (
-                    <div className="bg-white rounded-3xl p-5 shadow-sm animate-pulse">
+                    <div className="bg-surface rounded-3xl p-5 shadow-sm animate-pulse">
                       {/* IMAGE */}
-                      <div className="w-full h-56 bg-gray-200 rounded-2xl"></div>
+                      <div className="w-full h-56 bg-subtle rounded-2xl"></div>
 
                       {/* TITLE */}
-                      <div className="mt-5 h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="mt-5 h-4 bg-subtle rounded w-3/4"></div>
 
                       {/* PRICE */}
-                      <div className="mt-3 h-4 bg-gray-200 rounded w-1/4"></div>
+                      <div className="mt-3 h-4 bg-subtle rounded w-1/4"></div>
 
                       {/* CTA */}
-                      <div className="mt-5 h-4 bg-gray-200 rounded w-1/2"></div>
+                      <div className="mt-5 h-4 bg-subtle rounded w-1/2"></div>
                     </div>
                   ))
                 : filteredProducts.map((product) => (
@@ -187,7 +187,7 @@ export default function Products() {
       {/* MOBILE FILTER MODAL */}
       {showFilters && (
         <div className="fixed inset-0 bg-black/40 z-50 flex justify-end">
-          <div className="bg-white w-80 h-full p-6 overflow-y-auto">
+          <div className="bg-surface w-80 h-full p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Filters</h2>
 
             {/* CATEGORY */}

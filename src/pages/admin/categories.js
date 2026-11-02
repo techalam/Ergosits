@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { useRouter } from "next/router";
+import { requireAdmin } from "../../lib/adminAuth";
 
 export default function Categories() {
 
@@ -25,12 +26,7 @@ export default function Categories() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-
-      if (!data.user || data.user.email !== "support.ergosits@gmail.com") {
-        return router.push("/admin/login");
-      }
-      fetchCategories();
+      if (await requireAdmin(router)) fetchCategories();
     };
 
     checkUser();
@@ -116,11 +112,11 @@ export default function Categories() {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl shadow overflow-auto">
+      <div className="bg-surface rounded-2xl shadow overflow-auto">
 
         <table className="w-full text-sm sm:text-base">
 
-          <thead className="bg-gray-100 text-left">
+          <thead className="bg-canvas text-left">
             <tr>
               <th className="p-4">Image</th>
               <th className="p-4">Name</th>
@@ -171,7 +167,7 @@ export default function Categories() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
 
-          <div className="bg-white p-8 rounded-2xl w-full max-w-md">
+          <div className="bg-surface p-8 rounded-2xl w-full max-w-md">
 
             <h2 className="text-2xl font-semibold mb-6">
               {editingId ? "Edit Category" : "Add Category"}

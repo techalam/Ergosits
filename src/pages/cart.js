@@ -40,7 +40,7 @@ export default function Cart() {
                 alt={item.name}
                 width={100}
                 height={100}
-                className="rounded-lg object-contain bg-[#F5F5F7]"
+                className="rounded-lg object-contain bg-canvas"
               />
 
               <div className="flex-1">
@@ -49,7 +49,7 @@ export default function Cart() {
                   {item.name}
                 </h2>
 
-                <p className="text-gray-500 text-sm md:text-base mt-1">
+                <p className="text-muted text-sm md:text-base mt-1">
                   ₹{item.price.toLocaleString()}
                 </p>
 

@@ -1,9 +1,12 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { themeScript } from "../components/ThemeProvider";
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="en" suppressHydrationWarning>
       <Head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <meta name="color-scheme" content="light dark" />
         {/* Inter Font */}
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>

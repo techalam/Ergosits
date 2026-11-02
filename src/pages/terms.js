@@ -6,17 +6,17 @@ export default function Terms() {
         Terms & Conditions
       </h1>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         By using the Ergosits website you agree to the terms
         and conditions outlined here.
       </p>
 
-      <p className="text-gray-600 leading-relaxed mb-6">
+      <p className="text-muted leading-relaxed mb-6">
         All product information, pricing and availability
         are subject to change without prior notice.
       </p>
 
-      <p className="text-gray-600 leading-relaxed">
+      <p className="text-muted leading-relaxed">
         Unauthorized use of the website or its content
         is strictly prohibited.
       </p>
