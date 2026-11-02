@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-line">
+      <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl">
         {/* TOP */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-6">
           {/* LOGO */}

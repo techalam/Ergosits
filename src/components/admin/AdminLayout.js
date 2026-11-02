@@ -26,7 +26,7 @@ export default function AdminLayout({ children }) {
     <div className="min-h-screen bg-canvas text-foreground">
 
       {/* HEADER */}
-      <div className="sticky top-0 z-50 backdrop-blur bg-surface/70 border-b">
+      <div className="sticky top-0 z-50 backdrop-blur bg-surface/70">
 
         <div className="flex justify-between items-center px-4 py-3">
 
